@@ -1,6 +1,9 @@
 package com.dreamgyf.launcher.view.main;
 
 import com.dreamgyf.launcher.config.LayoutConfig;
+import com.dreamgyf.launcher.view.cell.Cell;
+
+import java.util.List;
 
 public class MainViewManager {
 
@@ -20,5 +23,9 @@ public class MainViewManager {
 		mColCount = LayoutConfig.getCols();
 
 		mMainView.setupGrid(mRowCount, mColCount);
+	}
+
+	public void render(List<Cell> cells) {
+		mMainView.render(cells);
 	}
 }

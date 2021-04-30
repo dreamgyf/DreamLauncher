@@ -1,8 +1,11 @@
 package com.dreamgyf.launcher.pm;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.dreamgyf.launcher.view.cell.AppCellBuilder;
+import com.dreamgyf.launcher.view.cell.Cell;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class LauncherAppManager {
@@ -27,6 +30,17 @@ public class LauncherAppManager {
 	private LauncherAppManager(Context context) {
 		mAppContext = context.getApplicationContext();
 		mLauncherAppLoader = LauncherAppLoader.getInstance(mAppContext);
+	}
+
+	public List<Cell> getAppCells() {
+		List<Cell> appCells = new ArrayList<>();
+
+		List<App> apps = mLauncherAppLoader.obtainLauncherApps();
+		for (App app : apps) {
+			appCells.add(AppCellBuilder.build(mAppContext, app));
+		}
+
+		return appCells;
 	}
 
 }

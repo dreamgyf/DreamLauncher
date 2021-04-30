@@ -1,9 +1,10 @@
-package com.dreamgyf.launcher.view.main;
+package com.dreamgyf.launcher.view.cell;
 
 import android.view.View;
 
 public class Cell {
 
+	private final int mPage;
 	private final int mRow;
 	private final int mCol;
 	private final int mRowSpan;
@@ -11,12 +12,17 @@ public class Cell {
 
 	private final View mView;
 
-	public Cell(View view, int row, int rowSpan, int col, int colSpan) {
+	public Cell(View view, int page, int row, int rowSpan, int col, int colSpan) {
 		mView = view;
+		mPage = page;
 		mRow = row;
 		mRowSpan = rowSpan;
 		mCol = col;
 		mColSpan = colSpan;
+	}
+
+	public int getPage() {
+		return mPage;
 	}
 
 	public int getRow() {

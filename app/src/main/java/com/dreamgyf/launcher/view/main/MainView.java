@@ -8,14 +8,16 @@ import android.widget.GridLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
 import com.dreamgyf.launcher.R;
+import com.dreamgyf.launcher.view.cell.Cell;
 
 import java.util.List;
 
 public class MainView extends FrameLayout {
 
-	private GridLayout mGridLayout;
+	private MainViewPager mViewPager;
 
 	public MainView(@NonNull Context context) {
 		super(context);
@@ -29,21 +31,14 @@ public class MainView extends FrameLayout {
 
 	private void init(AttributeSet attrs) {
 		LayoutInflater.from(getContext()).inflate(R.layout.view_main, this, true);
-		mGridLayout = findViewById(R.id.layout_grid);
+		mViewPager = findViewById(R.id.viewpager);
 	}
 
 	public void setupGrid(int rowCount, int colCount) {
-		mGridLayout.setRowCount(rowCount);
-		mGridLayout.setColumnCount(colCount);
+		mViewPager.setupGrid(rowCount, colCount);
 	}
 
 	public void render(List<Cell> cells) {
-		for (Cell cell : cells) {
-			GridLayout.Spec rowSpec = GridLayout.spec(cell.getRow(), cell.getRowSpan());
-			GridLayout.Spec colSpec = GridLayout.spec(cell.getCol(), cell.getColSpan());
-			GridLayout.LayoutParams lp = new GridLayout.LayoutParams(rowSpec, colSpec);
-
-			mGridLayout.addView(cell.getView(), lp);
-		}
+		mViewPager.render(cells);
 	}
 }

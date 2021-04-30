@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 
+import com.dreamgyf.launcher.config.LayoutConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +46,16 @@ public class LauncherAppLoader {
 	public List<App> obtainLauncherApps() {
 		List<App> apps = new ArrayList<>();
 
+		int page = 0;
+		int row = 0;
+		int col = 0;
+		int rowCount = LayoutConfig.getRows();
+		int colCount = LayoutConfig.getCols();
+
 		for (LauncherActivityInfo info : obtainLauncherActivityInfoList()) {
 			App app = new App();
 			app.info = new AppInfo();
+			app.layout = new AppLayout();
 
 			app.componentName = info.getComponentName().clone();
 			app.info.packageName = app.componentName.getPackageName();
@@ -55,6 +64,22 @@ public class LauncherAppLoader {
 				app.info.name = getAppName(app.info.packageName);
 			} catch (PackageManager.NameNotFoundException ignore) {
 				app.info.name = app.info.packageName;
+			}
+
+			//指定位置
+			app.layout.page = page;
+			app.layout.row = row;
+			app.layout.col = col++;
+
+			//计算下一个app的位置
+			if (col > colCount - 1) {
+				++row;
+				col = 0;
+			}
+			if (row > rowCount - 1) {
+				++page;
+				row = 0;
+				col = 0;
 			}
 
 			apps.add(app);
