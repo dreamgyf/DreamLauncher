@@ -2,7 +2,12 @@ package com.dreamgyf.launcher;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.dreamgyf.launcher.pm.LauncherAppManager;
 import com.dreamgyf.launcher.view.main.MainViewManager;
@@ -17,11 +22,18 @@ public class Launcher extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launcher);
+		setupTheme();
 
 		mAppManager = LauncherAppManager.getInstance(this);
 		mMainViewManager = new MainViewManager(findViewById(R.id.main));
 
 		mMainViewManager.render(mAppManager.getAppCells());
+	}
+
+	private void setupTheme() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+			getWindow().setNavigationBarContrastEnforced(false);
+		}
 	}
 
 }
