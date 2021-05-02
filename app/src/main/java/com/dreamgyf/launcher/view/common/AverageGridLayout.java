@@ -1,4 +1,4 @@
-package com.dreamgyf.launcher.view;
+package com.dreamgyf.launcher.view.common;
 
 import android.content.Context;
 import android.graphics.Canvas;

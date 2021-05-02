@@ -1,4 +1,4 @@
-package com.dreamgyf.launcher.view.manager;
+package com.dreamgyf.launcher.view;
 
 import com.dreamgyf.launcher.Launcher;
 import com.dreamgyf.launcher.R;
