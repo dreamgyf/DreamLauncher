@@ -37,9 +37,11 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 	 */
 	private final static int TOUCH_EFFECTIVE_RANGE = 20;
 	private final static int CLICK_WAIT_TIME = 250;
-	private final static int LONG_CLICK_TRIGGER_TIME = 1000;
+	private final static int LONG_CLICK_TRIGGER_TIME = 500;
 
 	private final Context mContext;
+
+	private final DragController mDragController;
 
 	private final Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -47,6 +49,7 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 
 	private TouchController(Context context) {
 		mContext = context;
+		mDragController = new DragController(context);
 		mViewTouchRecordMap = new WeakHashMap<>();
 	}
 
@@ -61,6 +64,10 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 		if (mViewTouchRecordMap.remove(view) != null) {
 			view.setOnTouchListener(null);
 		}
+	}
+
+	public DragController getDragController() {
+		return mDragController;
 	}
 
 	@Override
@@ -79,9 +86,11 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 	@Override
 	public boolean onLongClick(View v) {
 		if (v instanceof AppCellView) {
-			Toast.makeText(mContext, "long click", Toast.LENGTH_SHORT).show();
+			DragItemInfo dragItemInfo = new DragItemInfo();
+			dragItemInfo.view = v;
+			mDragController.startDrag(dragItemInfo);
 		}
-		return false;
+		return true;
 	}
 
 	@Override
