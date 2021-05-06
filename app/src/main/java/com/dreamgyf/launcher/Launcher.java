@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dreamgyf.launcher.pm.LauncherAppManager;
+import com.dreamgyf.launcher.view.DragLayout;
 import com.dreamgyf.launcher.view.main.MainViewManager;
 
 public class Launcher extends AppCompatActivity {
@@ -18,22 +19,34 @@ public class Launcher extends AppCompatActivity {
 
 	private MainViewManager mMainViewManager;
 
+	private DragLayout mDragLayout;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launcher);
 		setupTheme();
+		setupViews();
 
 		mAppManager = LauncherAppManager.getInstance(this);
 		mMainViewManager = new MainViewManager(findViewById(R.id.main));
 
 		mMainViewManager.render(mAppManager.getAppCells());
+
 	}
 
 	private void setupTheme() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			getWindow().setNavigationBarContrastEnforced(false);
 		}
+	}
+
+	private void setupViews() {
+		bindViews();
+	}
+
+	private void bindViews() {
+		mDragLayout = findViewById(R.id.layout_drag);
 	}
 
 }
