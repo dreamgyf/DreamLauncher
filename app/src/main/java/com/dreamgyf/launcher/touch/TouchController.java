@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.dreamgyf.launcher.pm.App;
 import com.dreamgyf.launcher.view.cell.AppCellView;
@@ -16,7 +14,7 @@ import java.util.WeakHashMap;
 
 import static android.view.MotionEvent.*;
 
-public class TouchController implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
+public class TouchController implements View.OnTouchListener {
 
 	private static TouchController sInstance;
 
@@ -70,7 +68,6 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 		return mDragController;
 	}
 
-	@Override
 	public void onClick(View v) {
 		if (v instanceof AppCellView) {
 			App app = (App) v.getTag();
@@ -83,14 +80,14 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 		}
 	}
 
-	@Override
-	public boolean onLongClick(View v) {
+	public void onLongClick(View v, float lastMoveX, float lastMoveY) {
 		if (v instanceof AppCellView) {
 			DragItemInfo dragItemInfo = new DragItemInfo();
 			dragItemInfo.view = v;
+			dragItemInfo.lastMoveX = lastMoveX;
+			dragItemInfo.lastMoveY = lastMoveY;
 			mDragController.startDrag(dragItemInfo);
 		}
-		return true;
 	}
 
 	@Override
@@ -99,33 +96,44 @@ public class TouchController implements View.OnClickListener, View.OnLongClickLi
 		if (r == null) {
 			return false;
 		}
+
+		float x = event.getX();
+		float y = event.getY();
+
 		switch (event.getAction()) {
 			case ACTION_DOWN:
-				r.lastDownX = event.getX();
-				r.lastDownY = event.getY();
+				r.lastDownX = x;
+				r.lastDownY = y;
+				r.lastMoveX = x;
+				r.lastMoveY = y;
 				r.lastDownTime = System.currentTimeMillis();
 				r.isStillDown = true;
 				mHandler.postDelayed(() -> {
 					if (r.isStillDown) {
-						onLongClick(v);
+						onLongClick(v, r.lastMoveX, r.lastMoveY);
 					}
 				}, LONG_CLICK_TRIGGER_TIME);
 				break;
 			case ACTION_MOVE:
-				if (r.isStillDown && !isInEffectiveRange(r.lastDownX, r.lastDownY, event.getX(), event.getY())) {
-					r.isStillDown = false;
+				if (r.isStillDown) {
+					if (isInEffectiveRange(r.lastDownX, r.lastDownY, x, y)) {
+						r.lastMoveX = x;
+						r.lastMoveY = y;
+					} else {
+						r.reset();
+					}
 				}
 				break;
 			case ACTION_UP:
 				if (r.isStillDown
 						&& System.currentTimeMillis() - r.lastDownTime < CLICK_WAIT_TIME
-						&& isInEffectiveRange(r.lastDownX, r.lastDownY, event.getX(), event.getY())) {
-					r.isStillDown = false;
+						&& isInEffectiveRange(r.lastDownX, r.lastDownY, x, y)) {
+					r.reset();
 					onClick(v);
 				}
 				break;
 			case ACTION_CANCEL:
-				r.isStillDown = false;
+				r.reset();
 				break;
 		}
 		return true;

@@ -1,17 +1,16 @@
 package com.dreamgyf.launcher.view;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.AttributeSet;
 import android.view.View;
-
-import androidx.annotation.Nullable;
 
 import com.dreamgyf.launcher.util.PositionUtil;
 
+@SuppressLint("ViewConstructor")
 public class DragShadowView extends View {
 
 	private final static float SCALE = 1.1f;
@@ -21,13 +20,19 @@ public class DragShadowView extends View {
 
 	private final View mRefView;
 
+	private final float mLastTouchX;
+
+	private final float mLastTouchY;
+
 	private Paint mPaint;
 
 	private DragLayout mDragLayout;
 
-	public DragShadowView(Context context, View referenceView) {
+	public DragShadowView(Context context, View referenceView, float lastTouchX, float lastTouchY) {
 		super(context);
 		mRefView = referenceView;
+		mLastTouchX = lastTouchX;
+		mLastTouchY = lastTouchY;
 		mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
 
 		Bitmap bitmap = Bitmap.createBitmap(mRefView.getWidth(), mRefView.getHeight(), Bitmap.Config.ARGB_8888);
@@ -70,5 +75,10 @@ public class DragShadowView extends View {
 
 	public void dismiss() {
 		mDragLayout.removeView(this);
+	}
+
+	public void move(float x, float y) {
+		setTranslationX(x - mLastTouchX);
+		setTranslationY(y - mLastTouchY);
 	}
 }
