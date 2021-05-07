@@ -2,7 +2,7 @@ package com.dreamgyf.launcher.util;
 
 import android.view.View;
 
-import com.dreamgyf.launcher.view.DragLayout;
+import androidx.viewpager.widget.ViewPager;
 
 public class PositionUtil {
 
@@ -12,7 +12,11 @@ public class PositionUtil {
 		while (v != null && v != parent) {
 			location[0] += v.getX();
 			location[1] += v.getY();
-			v = (View) v.getParent();
+			View p = (View) v.getParent();
+			if (p instanceof ViewPager) {
+				location[0] -= ((ViewPager) p).indexOfChild(v) * p.getWidth();
+			}
+			v = p;
 		}
 		return location;
 	}

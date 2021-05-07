@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dreamgyf.launcher.pm.LauncherAppManager;
+import com.dreamgyf.launcher.touch.TouchController;
 import com.dreamgyf.launcher.view.DragLayout;
 import com.dreamgyf.launcher.view.main.MainViewManager;
 
@@ -21,12 +22,17 @@ public class Launcher extends AppCompatActivity {
 
 	private DragLayout mDragLayout;
 
+	private TouchController mTouchController;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launcher);
 		setupTheme();
 		setupViews();
+
+		mTouchController = TouchController.getInstance(this);
+		mTouchController.attach(this);
 
 		mAppManager = LauncherAppManager.getInstance(this);
 		mMainViewManager = new MainViewManager(findViewById(R.id.main));

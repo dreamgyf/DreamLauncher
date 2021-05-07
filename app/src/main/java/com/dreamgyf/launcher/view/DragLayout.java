@@ -3,16 +3,13 @@ package com.dreamgyf.launcher.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dreamgyf.launcher.touch.DragController;
 import com.dreamgyf.launcher.touch.TouchController;
-import com.dreamgyf.launcher.view.cell.AppCellView;
 
 /**
  * 预留，未实现

@@ -10,46 +10,41 @@ public class DragController {
 
 	private final Context mContext;
 
-	private View mLastView;
+	private DragLayout mDragLayout;
 
-	private DragShadowView mLastShadowView;
+	private DragEvent mDragEvent;
 
 	public DragController(Context context) {
 		mContext = context;
 	}
 
+	public void attach(DragLayout dragLayout) {
+		mDragLayout = dragLayout;
+	}
+
 	public void startDrag(DragItemInfo dragItemInfo) {
-		View view = dragItemInfo.view;
-		view.setVisibility(View.INVISIBLE);
+		mDragEvent = new DragEvent();
+		mDragEvent.originView = dragItemInfo.view;
+		mDragEvent.shadowView = new DragShadowView(mContext, dragItemInfo.view, dragItemInfo.lastMoveX, dragItemInfo.lastMoveY);
+		mDragEvent.shadowView.bindDragLayout(mDragLayout);
 
-		View v = (View) view.getParent();
-		while (v != null && !(v instanceof DragLayout)) {
-			v = (View) v.getParent();
-		}
-		DragLayout dragLayout = (DragLayout) v;
-
-		DragShadowView dragShadowView = new DragShadowView(mContext, view, dragItemInfo.lastMoveX, dragItemInfo.lastMoveY);
-		dragShadowView.bindDragLayout(dragLayout);
-		dragShadowView.show();
-
-		mLastView = view;
-		mLastShadowView = dragShadowView;
+		mDragEvent.originView.setVisibility(View.INVISIBLE);
+		mDragEvent.shadowView.show();
 	}
 
 	public boolean handleMoveEvent(float x, float y) {
-		if (mLastView != null && mLastShadowView != null) {
-			mLastShadowView.move(x, y);
+		if (mDragEvent != null) {
+			mDragEvent.shadowView.move(x, y);
 			return true;
 		}
 		return false;
 	}
 
 	public boolean handleEndEvent() {
-		if (mLastView != null && mLastShadowView != null) {
-			mLastView.setVisibility(View.VISIBLE);
-			mLastShadowView.dismiss();
-			mLastShadowView = null;
-			mLastView = null;
+		if (mDragEvent != null) {
+			mDragEvent.originView.setVisibility(View.VISIBLE);
+			mDragEvent.shadowView.dismiss();
+			mDragEvent = null;
 			return true;
 		}
 		return false;

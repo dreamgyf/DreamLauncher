@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.dreamgyf.launcher.Launcher;
+import com.dreamgyf.launcher.R;
 import com.dreamgyf.launcher.pm.App;
 import com.dreamgyf.launcher.view.cell.AppCellView;
 
@@ -45,10 +47,17 @@ public class TouchController implements View.OnTouchListener {
 
 	private final WeakHashMap<View, TouchRecord> mViewTouchRecordMap;
 
+	private Launcher mLauncher;
+
 	private TouchController(Context context) {
 		mContext = context;
 		mDragController = new DragController(context);
 		mViewTouchRecordMap = new WeakHashMap<>();
+	}
+
+	public void attach(Launcher launcher) {
+		mLauncher = launcher;
+		mDragController.attach(launcher.findViewById(R.id.layout_drag));
 	}
 
 	public void bind(View view) {
