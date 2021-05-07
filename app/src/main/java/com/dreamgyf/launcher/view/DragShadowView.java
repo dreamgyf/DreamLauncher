@@ -24,7 +24,7 @@ public class DragShadowView extends View {
 
 	private final float mLastTouchY;
 
-	private Paint mPaint;
+	private final Paint mPaint;
 
 	private DragLayout mDragLayout;
 

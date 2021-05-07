@@ -25,7 +25,7 @@ public class LauncherViewManager {
 	}
 
 	private void initMain() {
-		mMainViewManager = new MainViewManager(mDragLayout.findViewById(R.id.main));
+		mMainViewManager = new MainViewManager(mDragLayout, mDragLayout.findViewById(R.id.main));
 	}
 
 	private void initDock() {

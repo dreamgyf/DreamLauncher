@@ -4,12 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.dreamgyf.launcher.pm.LauncherAppManager;
+import com.dreamgyf.launcher.touch.DragController;
 import com.dreamgyf.launcher.touch.TouchController;
 import com.dreamgyf.launcher.view.DragLayout;
 import com.dreamgyf.launcher.view.main.MainViewManager;
@@ -24,6 +21,8 @@ public class Launcher extends AppCompatActivity {
 
 	private TouchController mTouchController;
 
+	private DragController mDragController;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,11 +33,12 @@ public class Launcher extends AppCompatActivity {
 		mTouchController = TouchController.getInstance(this);
 		mTouchController.attach(this);
 
+		mDragController = mTouchController.getDragController();
+
 		mAppManager = LauncherAppManager.getInstance(this);
-		mMainViewManager = new MainViewManager(findViewById(R.id.main));
 
+		mMainViewManager = new MainViewManager(mDragLayout, findViewById(R.id.main));
 		mMainViewManager.render(mAppManager.getAppCells());
-
 	}
 
 	private void setupTheme() {
