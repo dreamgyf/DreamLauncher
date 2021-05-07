@@ -39,16 +39,21 @@ public class DragController {
 		mLastShadowView = dragShadowView;
 	}
 
-	public void handleMoveEvent(float x, float y) {
-
+	public boolean handleMoveEvent(float x, float y) {
+		if (mLastView != null && mLastShadowView != null) {
+			return true;
+		}
+		return false;
 	}
 
-	public void handleEndEvent() {
+	public boolean handleEndEvent() {
 		if (mLastView != null && mLastShadowView != null) {
 			mLastView.setVisibility(View.VISIBLE);
 			mLastShadowView.dismiss();
 			mLastShadowView = null;
 			mLastView = null;
+			return true;
 		}
+		return false;
 	}
 }
