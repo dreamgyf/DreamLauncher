@@ -19,6 +19,8 @@ public class DragController {
 
 	private final List<DropContainer> mDropContainers = new ArrayList<>();
 
+	private DropContainer mLastDropContainer;
+
 	private DragEvent mDragEvent;
 
 	public DragController(Context context) {
@@ -48,6 +50,22 @@ public class DragController {
 			mDragEvent.shadowView.move(x, y);
 
 			DropContainer dropContainer = findDropContainer(x, y);
+
+			if (dropContainer != null) {
+				if (dropContainer != mLastDropContainer) {
+					if (mLastDropContainer != null) {
+						mLastDropContainer.onDragOut(mDragEvent);
+					}
+					dropContainer.onDragIn(mDragEvent);
+				}
+				dropContainer.onDragOver(mDragEvent);
+			} else {
+				if (mLastDropContainer != null) {
+					mLastDropContainer.onDragOut(mDragEvent);
+				}
+			}
+			mLastDropContainer = dropContainer;
+
 			return true;
 		}
 		return false;

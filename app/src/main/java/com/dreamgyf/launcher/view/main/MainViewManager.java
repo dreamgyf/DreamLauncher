@@ -3,6 +3,7 @@ package com.dreamgyf.launcher.view.main;
 import android.graphics.Rect;
 
 import com.dreamgyf.launcher.config.LayoutConfig;
+import com.dreamgyf.launcher.touch.DragEvent;
 import com.dreamgyf.launcher.touch.DropContainer;
 import com.dreamgyf.launcher.touch.TouchController;
 import com.dreamgyf.launcher.util.PositionUtil;
@@ -49,5 +50,20 @@ public class MainViewManager implements DropContainer {
 		rect.top = location[1];
 		rect.bottom = rect.top + mMainView.getHeight();
 		return rect;
+	}
+
+	@Override
+	public void onDragIn(DragEvent dragEvent) {
+
+	}
+
+	@Override
+	public void onDragOut(DragEvent dragEvent) {
+
+	}
+
+	@Override
+	public void onDragOver(DragEvent dragEvent) {
+
 	}
 }
